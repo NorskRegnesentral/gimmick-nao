@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package version="0.0.1" uuid="no_nr_rps_demo">
+ <names>
+  <name lang="en_US">no.nr.rps.june</name>
+  <name lang="nn_NO">no.nr.ssp.juni</name>
+ </names>
+ <supportedLanguages>
+  <language>en_US</language>
+  <language>nn_NO</language>
+ </supportedLanguages>
+ <descriptionLanguages>
+  <language>en_US</language>
+  <language>nn_NO</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="NR_June_Demo">
+   <nature>interactive</nature>
+   <names>
+    <name lang="en_US">NR Demo Rock Paper Scissor</name>
+   </names>
+   <triggerSentences/>
+   <loadingResponses/>
+   <autonomous/>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+ <requirements>
+  <naoqiRequirement minVersion="2.1.4.13"/>
+  <robotRequirement model="JULIETTE"/>
+  <robotRequirement model="NAO"/>
+ </requirements>
+</package>
