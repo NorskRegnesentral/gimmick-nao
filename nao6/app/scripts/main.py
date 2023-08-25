@@ -14,6 +14,7 @@ import stk.events
 import stk.services
 import stk.logging
 import vision_definitions
+import os
 import qi
 import numpy as np
 import cv2
@@ -71,6 +72,7 @@ class NRGimmickActivity(object):
 
 
     def sendImage(self, image):
+#        cv2.imwrite(os.path.join(gimmick_client.SimpleGimmickClient.DIR_PATH, "client_saw.jpg"), image)
         return self.gimmick_client.sendImageData(image)
     
     def try_picture(self, *args):

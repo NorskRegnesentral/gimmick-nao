@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+import cv2
+import numpy as np
 import zmq
 from typing import List
-import numpy as np
 
 class GimmickServer():
     DIR_PATH = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()), "no.nr.gimmick")
@@ -24,6 +25,7 @@ class GimmickServer():
         blob = self.socket.recv(flags=flags, copy=copy, track=track)
         image = np.frombuffer(bytes(memoryview(blob)), dtype=metadata['dtype'])
         image = image.reshape(metadata['shape'])
+#        cv2.imwrite(os.path.join(GimmickServer.DIR_PATH, 'server_saw.jpg'), image)
 
     def test_and_make_dir(self) -> None:
         """
