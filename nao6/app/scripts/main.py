@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 """
 A sample showing how to make a Python script as an app.
 """
