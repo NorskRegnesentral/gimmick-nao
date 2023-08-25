@@ -85,10 +85,9 @@ class NRGimmickActivity(object):
             fut.addCallback(self.future_judge)
 
     def future_judge(self, fut):
-        self.logger.info("judge said {}".format(fut.value()))
-
-            
-
+        val = fut.value()
+        self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
+        self.logger.info("judge said {}".format(val))
 
     def do_shutdown(self, *args):
         if args[0] != 0:
