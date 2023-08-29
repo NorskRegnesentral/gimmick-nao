@@ -4,6 +4,7 @@ import os
 import cv2
 import numpy as np
 import zmq
+import gimmick_model.recognitionmodel
 from typing import List
 
 class GimmickServer():
@@ -16,15 +17,18 @@ class GimmickServer():
         Initialize the server and get ready for getting images
         """
         self.test_and_make_dir()
+        self.recognitionModel = gimmick_model.recognitionmodel.RecognitionModel()
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)
         self.socket.bind("ipc://" + os.path.join(GimmickServer.DIR_PATH, "gimmick_local_socket"))
 
-    def begin_receive(self, flags = 0, copy = True, track = False) -> np.ndarray:
+    def receive_image(self, flags = 0, copy = True, track = False) -> np.ndarray:
         metadata = self.socket.recv_json(flags=flags)
         blob = self.socket.recv(flags=flags, copy=copy, track=track)
         image = np.frombuffer(bytes(memoryview(blob)), dtype=metadata['dtype'])
         image = image.reshape(metadata['shape'])
+        return image
+        
 #        cv2.imwrite(os.path.join(GimmickServer.DIR_PATH, 'server_saw.jpg'), image)
 
     def test_and_make_dir(self) -> None:
@@ -40,15 +44,16 @@ class GimmickServer():
 
 
     def process_image(self, image: np.ndarray) -> str:
-        return "rock"
+        _, result_str, _  = self.recognitionmodel.get_hand_landmarks((image,))
+        return result_str
 
-    def send_result(self, result: str):
+    def send_result(self, result: str) -> None:
         self.socket.send_string(result)
         
 
 if __name__ == "__main__":
     server = GimmickServer()
     while True:
-        image = server.begin_receive()
+        image = server.receive_image()
         result = server.process_image(image)
         server.send_result(result)
