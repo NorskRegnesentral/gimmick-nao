@@ -8,9 +8,8 @@ from zmq.eventloop import zmqstream
 class SimpleGimmickClient(object):
     """A simple client for ZeroMQ that connects to a well known socket,
     sends our image data, and waits for a response with the type"""
-    DIR_PATH = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()), "no.nr.gimmick")
-    if not os.path.exists(os.path.join(os.path.sep, "var", "run" "user")):
-        DIR_PATH = os.path.join(os.path.sep, "tmp", "no.nr.gimmick")
+    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
+    DIR_PATH = os.path.join(BASE_DIR, "no.nr.gimmick") if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", "no.nr.gimmick") 
 
     def __init__(self):
         self.context = zmq.Context()

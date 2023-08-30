@@ -8,9 +8,8 @@ import gimmick_model.recognitionmodel
 from typing import List
 
 class GimmickServer():
-    DIR_PATH = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()), "no.nr.gimmick")
-    if not os.path.exists(os.path.join(os.path.sep, "var", "run" "user")):
-        DIR_PATH = os.path.join(os.path.sep, "tmp", "no.nr.gimmick")
+    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
+    DIR_PATH = os.path.join(BASE_DIR, "no.nr.gimmick") if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", "no.nr.gimmick")
 
     def __init__(self):
         """
@@ -44,7 +43,7 @@ class GimmickServer():
 
 
     def process_image(self, image: np.ndarray) -> str:
-        _, result_str, _  = self.recognitionmodel.get_hand_landmarks((image,))
+        _, result_str, _  = self.recognitionModel.get_hand_landmarks((image,))
         return result_str
 
     def send_result(self, result: str) -> None:
