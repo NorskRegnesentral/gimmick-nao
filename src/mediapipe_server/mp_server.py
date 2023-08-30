@@ -28,8 +28,6 @@ class GimmickServer():
         image = image.reshape(metadata['shape'])
         return image
         
-#        cv2.imwrite(os.path.join(GimmickServer.DIR_PATH, 'server_saw.jpg'), image)
-
     def test_and_make_dir(self) -> None:
         """
         Making a directory for aiding the communication between the server and
@@ -43,7 +41,7 @@ class GimmickServer():
 
 
     def process_image(self, image: np.ndarray) -> str:
-        _, result_str, _  = self.recognitionModel.get_hand_landmarks((image,))
+        _, result_str, _  = self.recognitionModel.get_hand_landmarks((image,), draw_landmarks=False)
         return result_str
 
     def send_result(self, result: str) -> None:
@@ -56,3 +54,4 @@ if __name__ == "__main__":
         image = server.receive_image()
         result = server.process_image(image)
         server.send_result(result)
+        print(f"Send the image back: {toc - tic:0.4f} seconds")
