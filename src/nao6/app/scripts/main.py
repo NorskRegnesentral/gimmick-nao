@@ -78,6 +78,7 @@ class NRGimmickActivity(object):
     def try_picture(self, *args):
         if args[0] != 0:
             return
+        self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("Click...")
         image = self.getImageFromCamera()
         if not image is None:
@@ -86,6 +87,7 @@ class NRGimmickActivity(object):
 
     def future_judge(self, fut):
         val = fut.value()
+        self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
         self.logger.info("judge said {}".format(val))
 
@@ -109,6 +111,7 @@ class NRGimmickActivity(object):
         
     def stop(self):
         self.disconnectFromCamera()
+        self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("Stopping gimmick")
         self.qiapp.stop()
 
