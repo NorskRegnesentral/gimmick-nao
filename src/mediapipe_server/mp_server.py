@@ -54,4 +54,3 @@ if __name__ == "__main__":
         image = server.receive_image()
         result = server.process_image(image)
         server.send_result(result)
-        print(f"Send the image back: {toc - tic:0.4f} seconds")
