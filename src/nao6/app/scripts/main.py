@@ -110,19 +110,23 @@ class NRGimmickActivity(object):
         if args[0] != 0:
             return
         self.stop()
+
+    def swap_stand_sit(self, *args):
+        if args[0] != 0:
+            return
+        current_posture = self.s.ALRobotPosture.getPostureFamily()
+        self.logger.info("current posture is {}".format(current_posture))
+        new_posture = "Sit" if current_posture == "Standing" else "Stand"
+        self.logger.info("Go to new posture: {}".format(new_posture))
+        qi.async(self.s.ALRobotPosture.goToPosture, new_posture, 0.6)
         
     def on_start(self):
         "Ask to be touched, waits, and exits."
-        # Two ways of waiting for events
-        # 1) block until it's called
-
-        self.s.ALTextToSpeech.setLanguage("English")
-        self.s.ALTextToSpeech.say("Starting gimmick.")
-
         self.connectToCamera()        
         self.events.connect("FrontTactilTouched", self.try_picture)
         self.events.connect("HandRightBackTouched", self.try_picture)
-        self.events.connect("RearTactilTouched", self.do_shutdown)
+        self.events.connect("RearTactilTouched", self.swap_stand_sit)
+
         
     def stop(self):
         self.disconnectFromCamera()
