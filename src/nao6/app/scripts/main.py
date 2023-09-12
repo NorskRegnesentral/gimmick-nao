@@ -75,13 +75,28 @@ class NRGimmickActivity(object):
 #        cv2.imwrite(os.path.join(gimmick_client.SimpleGimmickClient.DIR_PATH, "client_saw.jpg"), image)
         return self.gimmick_client.sendImageData(image)
     
+    def blink(self):
+        rDuration = 0.05
+        self.s.ALLeds.fadeRGB( "FaceLed0", 0x000000, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed1", 0x000000, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed2", 0xffffff, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed3", 0x000000, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed4", 0x000000, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed5", 0x000000, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed6", 0xffffff, rDuration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed7", 0x000000, rDuration, _async=True )
+        time.sleep( 0.1 )
+        self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, rDuration )
+
     def try_picture(self, *args):
         if args[0] != 0:
             return
         self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("Click...")
+        qi.async(self.blink)
         image = self.getImageFromCamera()
         if not image is None:
+            self.logger.info("Sending image...")
             fut = qi.async(self.sendImage, image)
             fut.addCallback(self.future_judge)
 
