@@ -16,6 +16,7 @@ import stk.logging
 import vision_definitions
 import os
 import qi
+import signal
 import numpy as np
 import cv2
 import gimmick_client
@@ -29,6 +30,7 @@ class NRGimmickActivity(object):
         self.s = stk.services.ServiceCache(qiapp.session)
         self.logger = stk.logging.get_logger(qiapp.session, self.APP_ID)
         self.gimmick_client = gimmick_client.SimpleGimmickClient()
+        signal.signal(signal.SIGINT, self.stop)
 
     def connectToCamera(self):
         try:
