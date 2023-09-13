@@ -25,6 +25,7 @@ class NRGimmickActivity(object):
     "A sample standalone app, that demonstrates simple Python usage"
     APP_ID = "no.nr.gimmick"
     def __init__(self, qiapp):
+        self.duration = 0.05
         self.qiapp = qiapp
         self.events = stk.events.EventHelper(qiapp.session)
         self.s = stk.services.ServiceCache(qiapp.session)
@@ -78,17 +79,15 @@ class NRGimmickActivity(object):
         return self.gimmick_client.sendImageData(image)
     
     def blink(self):
-        rDuration = 0.05
-        self.s.ALLeds.fadeRGB( "FaceLed0", 0x000000, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed1", 0x000000, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed2", 0xffffff, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed3", 0x000000, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed4", 0x000000, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed5", 0x000000, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed6", 0xffffff, rDuration, _async=True )
-        self.s.ALLeds.fadeRGB( "FaceLed7", 0x000000, rDuration, _async=True )
-        time.sleep( 0.1 )
-        self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, rDuration )
+        self.s.ALLeds.fadeRGB( "FaceLed0", 0x000000, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed1", 0x000000, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed2", 0xffffff, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed3", 0x000000, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed4", 0x000000, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed5", 0x000000, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed6", 0xffffff, self.duration, _async=True )
+        self.s.ALLeds.fadeRGB( "FaceLed7", 0x000000, self.duration, _async=True )
+        
 
     def try_picture(self, *args):
         if args[0] != 0:
@@ -104,6 +103,16 @@ class NRGimmickActivity(object):
 
     def future_judge(self, fut):
         val = fut.value()
+        color = 0xffffff
+        if val == "paper":
+            color = 0x00ff00
+        elif val == "scissors":
+            color = 0xff7f00
+        elif val == "rock":
+            color = 0x0000ff
+        else:
+            color = 0xff00ff
+        self.s.ALLeds.fadeRGB( "FaceLeds", color, self.duration, _async=True )                
         self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
         self.logger.info("judge said {}".format(val))
@@ -113,9 +122,13 @@ class NRGimmickActivity(object):
             return
         self.stop()
 
+    def clearEyes(self):
+        self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, self.duration, _async=True )
+
     def swap_stand_sit(self, *args):
         if args[0] != 0:
             return
+        self.clearEyes()
         current_posture = self.s.ALRobotPosture.getPostureFamily()
         self.logger.info("current posture is {}".format(current_posture))
         new_posture = "Sit" if current_posture == "Standing" else "Stand"
@@ -128,10 +141,12 @@ class NRGimmickActivity(object):
         self.events.connect("FrontTactilTouched", self.try_picture)
         self.events.connect("HandRightBackTouched", self.try_picture)
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
+        self.clearEyes()
 
         
     def stop(self):
         self.disconnectFromCamera()
+        self.clearEyes()
         self.s.ALTextToSpeech.setLanguage("English")
         self.s.ALTextToSpeech.say("Stopping gimmick")
         self.qiapp.stop()
