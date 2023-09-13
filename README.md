@@ -53,6 +53,33 @@ Run the `start_gimmick_server.sh` script.
 
 Run the `start_gimmick_client.sh` script.
 
+Alternatively, you can add these to `$HOME/naoqi/Preferences/autoload.ini`
+
+This has been done for the NAO 6 robots that NR has (at least for
+Dagen@IFI). This means if something isn't working, it may be better to
+just turn it off and try again.
+
+# How the thing works
+
+Right now, the classifier runs on the NAO and there are no game
+elements. With the scripts running, you can touch parts of NAO's body
+to activate the classifier.
+
+* Left hand: Activate classifier
+* Top front of head: Activate classifier
+* Back head: Change position between stand and sit (Ideally, sit is
+  better for longer periods).
+  
+The classifier uses the camera between and a little above NAO's eyes.
+When you activate the classifier, hold you hand around 50 cm from
+NAO's head. This should make sure that the entire hand is visible.
+
+If you move your hand fast enough, you can activate the classifier and
+get your picture taken using the same hand.
+
+Normally, NAO can run for about an hour or so before the battery needs
+to be changed. It may make sense to keep the battery charger
+connected, but it is nice to run the battery down a little.
 
 # Misc
 
