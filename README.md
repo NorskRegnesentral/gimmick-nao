@@ -28,6 +28,13 @@ socket and then will process it. It uses the recognition model from
 [gimmick_model](https://github.com/NorskRegnesentral/gimmick_model),
 which in turn uses MediaPipe.
 
+
+# Installing on NAO
+
+Running `scripts/sync-nao.sh` should synchronize the files from the repo
+to the NAO. This assumes that you already have Python 3.10 and all the
+other libraries installed.
+
 # Running on NAO
 
 We assume that you have a proper Python 3.10 build with the
@@ -40,11 +47,11 @@ start automatically afterwards when we have things working.
 
 ## Starting the server
 
-Run the `start_gimmick_server` script.
+Run the `start_gimmick_server.sh` script.
 
 ## Starting the client
 
-Run the `start_gimmick_client` script.
+Run the `start_gimmick_client.sh` script.
 
 
 # Misc
