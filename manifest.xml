@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package version="0.0.1" uuid="no_nr_rps_demo">
+<package version="0.0.2" uuid="no_nr_rps_demo" installOnlyAtStartup="false">
  <names>
-  <name lang="en_US">no.nr.rps.june</name>
-  <name lang="nn_NO">no.nr.ssp.juni</name>
+  <name lang="en_US">no.nr.rps.feb</name>
+  <name lang="nn_NO">no.nr.ssp.feb</name>
  </names>
  <supportedLanguages>
   <language>en_US</language>
@@ -13,14 +13,19 @@
   <language>nn_NO</language>
  </descriptionLanguages>
  <contents>
-  <behaviorContent path="NR_June_Demo">
+  <behaviorContent path="NR_RPS_Demo">
    <nature>interactive</nature>
    <names>
     <name lang="en_US">NR Demo Rock Paper Scissor</name>
    </names>
-   <triggerSentences/>
-   <loadingResponses/>
-   <autonomous/>
+   <permissions/>
+  </behaviorContent>
+  <behaviorContent path="rps_rock">
+   <nature>interactive</nature>
+   <permissions/>
+  </behaviorContent>
+  <behaviorContent path="rps_scissors">
+   <nature>interactive</nature>
    <permissions/>
   </behaviorContent>
  </contents>
