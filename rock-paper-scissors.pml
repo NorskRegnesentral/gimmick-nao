@@ -5,9 +5,12 @@
         <BehaviorDescription name="behavior" src="NR_RPS_Demo" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="rps_rock" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="rps_scissors" xar="behavior.xar" />
+        <BehaviorDescription name="behavior" src="rps_paper" xar="behavior.xar" />
     </BehaviorDescriptions>
     <Dialogs />
-    <Resources />
+    <Resources>
+        <File name="icon" src="icon.png" />
+    </Resources>
     <Topics />
     <IgnoredPaths />
     <Translations auto-fill="en_US">

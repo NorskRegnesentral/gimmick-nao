@@ -15,7 +15,7 @@
       <BehaviorLayer name="behavior_layer1">
         <BehaviorKeyframe name="keyframe1" index="1">
           <Diagram>
-            <Box name="rps_rock" id="2" localization="8" tooltip="This box is empty (contains a single motion layer with no motor position&#x0A;defined in it) and should be used to create any animation you would like." x="379" y="201">
+            <Box name="rps_paper" id="2" localization="8" tooltip="This box is empty (contains a single motion layer with no motor position&#x0A;defined in it) and should be used to create any animation you would like." x="247" y="66">
               <bitmap>media/images/box/movement/move.png</bitmap>
               <script language="4">
                 <content>
@@ -78,7 +78,7 @@
                     <Key frame="101" value="0.0036" />
                     <Key frame="111" value="0.00399995" />
                     <Key frame="121" value="0.0036" />
-                    <Key frame="131" value="0.00520003" />
+                    <Key frame="131" value="0.802243" />
                   </ActuatorCurve>
                   <ActuatorCurve name="value" actuator="RShoulderPitch" mute="0" unit="0">
                     <Key frame="10" value="86.9513" />
@@ -123,7 +123,7 @@
                     <Key frame="101" value="-9.40682" />
                     <Key frame="111" value="-9.40682" />
                     <Key frame="121" value="-9.40682" />
-                    <Key frame="131" value="-5" />
+                    <Key frame="131" value="-92.1023" />
                   </ActuatorCurve>
                 </ActuatorList>
               </Timeline>
