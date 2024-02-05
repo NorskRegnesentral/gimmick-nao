@@ -120,12 +120,13 @@ class NRGimmickActivity(object):
         qi.async(self.blink)
         self.take_picture()
 
-    def take_picture(self):
+    def take_picture(self, *args):
+        self.logger.info("Taking picture...")
         image = self.getImageFromCamera()
         if not image is None:
             self.logger.info("Sending image...")
             fut = qi.async(self.sendImage, image)
-            qi.async(self.s.ALTextToSpeech.say("Let's see..."))
+            qi.async(self.s.ALTextToSpeech.say, "Let's see...")
             fut.addCallback(self.future_judge)
 
     def future_judge(self, fut):
@@ -148,7 +149,7 @@ class NRGimmickActivity(object):
             
         self.s.ALLeds.fadeRGB( "FaceLeds", color, self.duration, _async=True )                
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
+        # self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
         qi.async(self.s.ALTextToSpeech.say,
                  self.decision_translations[self.game_states_to_translation[result]], delay=1500000)
         self.logger.info("judge said {}".format(val))
@@ -186,9 +187,8 @@ class NRGimmickActivity(object):
 
         final_behavior = "no_nr_rps/" + behavior_name
         self.logger.info("Running {}".format(final_behavior))
-        self.s.ALBehaviorManager.runBehavior(final_behavior)
-        #fut = qi.async(self.s.ALBehaviorManager.runBehavior("no_nr_rps/" + behavior_name))
-        #fut.addCallback(self.takePicture)
+        fut = qi.async(self.s.ALBehaviorManager.runBehavior, final_behavior)
+        fut.addCallback(self.take_picture)
 
     def play_rps(self, *args):
         if args[0] != 0:
@@ -205,19 +205,21 @@ class NRGimmickActivity(object):
         
     def on_start(self):
         "Ask to be touched, waits, and exits."
-        self.connectToCamera()        
+        self.connectToCamera()
         self.s.ALAutonomousLife.setState("solitary");
-        self.go_sit();
+        # self.go_sit();
         
         self.events.connect("FrontTactilTouched", self.try_picture)
-        self.events.connect("HandRightBackTouched", self.try_picture)
+        # self.events.connect("HandRightBackTouched", self.try_picture)
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
         self.events.connect("RightBumperPressed", self.play_rps)
         
         self.clearEyes()
+        self.logger.info("connected and ready!")
 
         
     def stop(self):
+        self.logger.info("Signal said stop")
         self.disconnectFromCamera()
         self.clearEyes()
         self.s.ALTextToSpeech.setLanguage(self.current_language)
