@@ -146,6 +146,7 @@ class NRGimmickActivity(object):
             choice_index = self.choices.index(self.current_choice)
             player_index = self.choices.index(val)
             result = choice_index - player_index
+            self.logger.info("Got result {} Robot {} player {}".format(result, choice_index, player_index))
             
         self.s.ALLeds.fadeRGB( "FaceLeds", color, self.duration, _async=True )                
         self.s.ALTextToSpeech.setLanguage(self.current_language)
@@ -187,8 +188,8 @@ class NRGimmickActivity(object):
 
         final_behavior = "no_nr_rps/" + behavior_name
         self.logger.info("Running {}".format(final_behavior))
-        fut = qi.async(self.s.ALBehaviorManager.runBehavior, final_behavior)
-        fut.addCallback(self.take_picture)
+        qi.async(self.s.ALBehaviorManager.runBehavior, final_behavior)
+        qi.async(self.take_picture, delay=5200000)
 
     def play_rps(self, *args):
         if args[0] != 0:
