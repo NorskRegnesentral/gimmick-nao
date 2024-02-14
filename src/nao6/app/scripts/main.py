@@ -219,7 +219,6 @@ class NRGimmickActivity(object):
         self.s.ALAutonomousLife.setState("solitary");
         # self.go_sit();
         
-        self.events.connect("FrontTactilTouched", self.try_picture)
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
         self.events.connect("RightBumperPressed", self.play_rps)
         self.events.connect("LeftBumperPressed", self.stop)
