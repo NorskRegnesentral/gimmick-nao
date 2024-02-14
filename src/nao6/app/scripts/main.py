@@ -161,11 +161,6 @@ class NRGimmickActivity(object):
     def ask_to_play_again(self):
         self.s.ALTextToSpeech.say("Touch my right foot bumper to play again.")
 
-    def do_shutdown(self, *args):
-        if args[0] != 0:
-            return
-        self.stop()
-
     def clearEyes(self):
         self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, self.duration, _async=True )
 
@@ -218,7 +213,7 @@ class NRGimmickActivity(object):
         self.connectToCamera()
         self.s.ALAutonomousLife.setState("solitary");
         # self.go_sit();
-        
+
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
         self.events.connect("RightBumperPressed", self.play_rps)
         self.events.connect("LeftBumperPressed", self.stop)
