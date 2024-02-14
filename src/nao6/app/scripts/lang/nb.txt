@@ -14,3 +14,6 @@ must_stand=Jeg må stå opp.
 lets_play=La oss spille en runde med stein, saks, papir
 started=Gimmick startet.
 stopping=Stopper gimmick.
+change_language=Bytter språk til {}.
+English=engelsk
+Norwegian=norsk

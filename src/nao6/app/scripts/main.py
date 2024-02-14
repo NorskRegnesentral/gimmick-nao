@@ -53,12 +53,12 @@ class NRGimmickActivity(object):
         self.s = stk.services.ServiceCache(qiapp.session)
         self.logger = stk.logging.get_logger(qiapp.session, self.APP_ID)
         self.gimmick_client = gimmick_client.SimpleGimmickClient()
-        self.current_language = "English"
+        self.current_language = "Norwegian"
         self.choices = ["rock", "paper", "scissors"]
         self.current_choice = ""
         self.translator = translator.Translator()
-        self.translator.read_languages(['en'])
-        self.translator.language = 'en'
+        self.translator.read_languages(['en', 'nb'])
+        self.translator.language = 'nb'
 
     def connectToCamera(self):
         try:
@@ -159,7 +159,8 @@ class NRGimmickActivity(object):
 
     def say_result(self, player_choice, result):
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say(self.translator.get_string("say_result").format(player_choice, self.current_choice))
+        self.s.ALTextToSpeech.say(self.translator.get_string("say_result").format(
+            self.translator.get_string(player_choice), self.translator.get_string(self.current_choice)))
         self.s.ALTextToSpeech.say(self.translator.get_string(self.decision_translations[self.game_states_to_translation[result]]))
         qi.async(self.ask_to_play_again, delay=1300000)
 
@@ -222,6 +223,7 @@ class NRGimmickActivity(object):
         # self.go_sit();
 
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
+        self.events.connect("MiddleTactilTouched", self.swap_languages)
         self.events.connect("RightBumperPressed", self.play_rps)
         self.events.connect("LeftBumperPressed", self.stop)
 
@@ -231,6 +233,21 @@ class NRGimmickActivity(object):
         self.s.ALTextToSpeech.setLanguage(self.current_language)
         self.s.ALTextToSpeech.say(self.translator.get_string("started"))
         
+    def swap_languages(self, *args):
+        if args[0] != 0:
+            return
+        if self.current_language == "English":
+            self.current_language = "Norwegian"
+            self.translator.language = 'nb'
+        else:
+            self.current_language = "English"
+            self.translator.language = 'en'
+
+        self.s.ALTextToSpeech.setLanguage(self.current_language)
+        qi.async(self.s.ALTextToSpeech.say(self.translator.get_string("change_language")
+                                           .format(self.translator.get_string(self.current_language))))
+
+
     def stop(self, *args):
         if args[0] != 0:
             return
