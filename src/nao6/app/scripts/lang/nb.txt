@@ -1,0 +1,15 @@
+lose_game=Jeg vinner!
+win_game=Du vinner!
+tie_game=Det er uavgjort.
+unknown_game=Jeg kunne ikke se hva du valgte.
+rock=stein
+paper=papir
+scissors=saks
+click=Klikk...
+lets_see=La oss se...
+say_result=Du valgte {}. Jeg valgte {}.
+play_again=Trykk min høyre fotbumper for å spille igjen.
+must_stand=Jeg må stå opp.
+lets_play=La oss spille en runde med stein, saks, papir
+started=Gimmick startet.
+stopping=Stopper gimmick.
