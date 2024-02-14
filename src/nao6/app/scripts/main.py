@@ -46,6 +46,7 @@ class NRGimmickActivity(object):
                                   2: 1}  # Player wins
 
     def __init__(self, qiapp):
+        self.currently_playing = False
         self.duration = 0.05
         self.qiapp = qiapp
         self.events = stk.events.EventHelper(qiapp.session)
@@ -164,6 +165,7 @@ class NRGimmickActivity(object):
 
     def ask_to_play_again(self):
         self.s.ALTextToSpeech.say(self.translator.get_string("play_again"))
+        self.currently_playing = False
 
     def clearEyes(self):
         self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, self.duration, _async=True )
@@ -199,8 +201,9 @@ class NRGimmickActivity(object):
         qi.async(self.take_picture, delay=5200000)
 
     def play_rps(self, *args):
-        if args[0] != 0:
+        if args[0] != 0 or self.currently_playing == True:
             return
+        self.currently_playing = True
         current_posture = self.s.ALRobotPosture.getPostureFamily()
         fut = None
         self.s.ALTextToSpeech.setLanguage(self.current_language)
