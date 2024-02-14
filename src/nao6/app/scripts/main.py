@@ -54,7 +54,6 @@ class NRGimmickActivity(object):
         self.current_language = "English"
         self.choices = ["rock", "paper", "scissors"]
         self.current_choice = ""
-        signal.signal(signal.SIGINT, self.stop)
 
     def connectToCamera(self):
         try:
@@ -150,10 +149,17 @@ class NRGimmickActivity(object):
             
         self.s.ALLeds.fadeRGB( "FaceLeds", color, self.duration, _async=True )                
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        # self.s.ALTextToSpeech.say("I thought I saw a {}".format(val))
-        qi.async(self.s.ALTextToSpeech.say,
-                 self.decision_translations[self.game_states_to_translation[result]], delay=1500000)
         self.logger.info("judge said {}".format(val))
+        qi.async(self.say_result, val, result)
+
+
+    def say_result(self, player_choice, result):
+        self.s.ALTextToSpeech.say("You chose {}. I chose {}.".format(player_choice, self.current_choice))
+        self.s.ALTextToSpeech.say(self.decision_translations[self.game_states_to_translation[result]])
+        qi.async(self.ask_to_play_again, delay=1300000)
+
+    def ask_to_play_again(self):
+        self.s.ALTextToSpeech.say("Touch my right foot bumper to play again.")
 
     def do_shutdown(self, *args):
         if args[0] != 0:
@@ -190,6 +196,7 @@ class NRGimmickActivity(object):
         final_behavior = "no_nr_rps/" + behavior_name
         self.logger.info("Running {}".format(final_behavior))
         qi.async(self.s.ALBehaviorManager.runBehavior, final_behavior)
+        qi.async(self.blink, delay=5200000)
         qi.async(self.take_picture, delay=5200000)
 
     def play_rps(self, *args):
@@ -197,12 +204,13 @@ class NRGimmickActivity(object):
             return
         current_posture = self.s.ALRobotPosture.getPostureFamily()
         fut = None
+        self.s.ALTextToSpeech.setLanguage(self.current_language)
         if current_posture != "Standing":
             fut = qi.async(self.s.ALRobotPosture.goToPosture, "Stand", 0.6)
-        self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("Let's play a game of rock, paper, scissors")
+            self.s.ALTextToSpeech.say("I need to stand up.")
         if fut != None:
             fut.wait()
+        self.s.ALTextToSpeech.say("Let's play a game of rock, paper, scissors")
         self.play_round()
         
     def on_start(self):
@@ -212,23 +220,27 @@ class NRGimmickActivity(object):
         # self.go_sit();
         
         self.events.connect("FrontTactilTouched", self.try_picture)
-        # self.events.connect("HandRightBackTouched", self.try_picture)
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
         self.events.connect("RightBumperPressed", self.play_rps)
-        
+        self.events.connect("LeftBumperPressed", self.stop)
+
+        self.blink()
         self.clearEyes()
         self.logger.info("connected and ready!")
-
-        
-    def stop(self):
-        self.logger.info("Signal said stop")
-        self.disconnectFromCamera()
-        self.clearEyes()
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("Stopping gimmick")
+        self.s.ALTextToSpeech.say("Gimmick started.")
+        
+    def stop(self, *args):
+        if args[0] != 0:
+            return
+        self.logger.info("User initiated stop")
+        self.s.ALTextToSpeech.setLanguage(self.current_language)
+        self.s.ALTextToSpeech.say("Stopping gimmick.")
         self.qiapp.stop()
 
     def on_stop(self):
+        self.disconnectFromCamera()
+        self.clearEyes()
         self.logger.info("Application finished.")
         self.events.clear()
 
