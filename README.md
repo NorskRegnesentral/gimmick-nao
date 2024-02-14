@@ -15,11 +15,16 @@ system.
 # Client
 
 You need to have numpy and zeromq for Python 2 installed on the NAO
-for this to work. Numpy is there by default, but zeromq must be built. We have that from ROSA. Then you simply run main.
+for this to work. Numpy is there by default, but zeromq must be built.
+We have that from ROSA. Then you simply run main.
 
-You press the back of the right hand or the front of the head to take
-a picture. You can also press the back of the head to stop. This is
-here mostly for testing purposes now.
+Once it is running, pressing the right foot bumper will start a game.
+Pressing the left foot bumper will stop the gimmick. Pressing the top
+of NAO's head will change language between Norwegian and English
+(default language is whatever the robot is configured to).
+
+You can also toggle between sitting and standing by pressing the back
+of NAO's head, this is more to give motors a rest.
 
 # Server
 
@@ -34,6 +39,18 @@ which in turn uses MediaPipe.
 Running `scripts/sync-nao.sh` should synchronize the files from the repo
 to the NAO. This assumes that you already have Python 3.10 and all the
 other libraries installed.
+
+## Stubs
+
+Since we are using a cross-built Python 3.10 on NAO, not all the
+packages have been installed via Pip, this results in stops when
+installing our gimmick_model package. We have all these installed,
+just not through pip. So, we created minimum stubs so that pip
+doesn't complain when installing gimmick_model.
+
+One *should not* use these outside of our environment. Especially if
+one can easily get the real modules. This only places an entry in
+pip's database. We are dependent on the actual modules being there.
 
 # Running on NAO
 
@@ -55,9 +72,9 @@ Run the `start_gimmick_client.sh` script.
 
 Alternatively, you can add these to `$HOME/naoqi/Preferences/autoload.ini`
 
-This has been done for the NAO 6 robots that NR has (at least for
-Dagen@IFI). This means if something isn't working, it may be better to
-just turn it off and try again.
+This has been done for the NAO 6 robots that NR has (at least as of
+this writing). This means if something isn't working, it may be better
+to just turn it off and try again.
 
 # How the thing works
 
@@ -65,17 +82,14 @@ Right now, the classifier runs on the NAO and there are no game
 elements. With the scripts running, you can touch parts of NAO's body
 to activate the classifier.
 
-* Left hand: Activate classifier
-* Top front of head: Activate classifier
+* Left Bumper: Start game
 * Back head: Change position between stand and sit (Ideally, sit is
   better for longer periods).
+* Top head: Change language between English and Norwegian  
   
 The classifier uses the camera between and a little above NAO's eyes.
 When you activate the classifier, hold you hand around 50 cm from
 NAO's head. This should make sure that the entire hand is visible.
-
-If you move your hand fast enough, you can activate the classifier and
-get your picture taken using the same hand.
 
 Normally, NAO can run for about an hour or so before the battery needs
 to be changed. It may make sense to keep the battery charger
