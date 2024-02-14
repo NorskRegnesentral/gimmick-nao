@@ -21,11 +21,12 @@ import random
 import numpy as np
 import cv2
 import gimmick_client
+import translator
 
 class NRGimmickActivity(object):
     "A sample standalone app, that demonstrates simple Python usage"
     APP_ID = "no.nr.gimmick"
-    decision_translations = ["I win!", "You win!", "Tie Game.", "I couldn't see what you chose."]
+    decision_translations = ["lose_game", "win_game", "tie_game", "unknown_game"]
     
     # Given how the indices are selected we can determine the
     # winner/loser/tie by subtracting the indexes from each
@@ -54,6 +55,9 @@ class NRGimmickActivity(object):
         self.current_language = "English"
         self.choices = ["rock", "paper", "scissors"]
         self.current_choice = ""
+        self.translator = translator.Translator()
+        self.translator.read_languages(['en'])
+        self.translator.language = 'en'
 
     def connectToCamera(self):
         try:
@@ -115,7 +119,7 @@ class NRGimmickActivity(object):
         if args[0] != 0:
             return
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("Click...")
+        self.s.ALTextToSpeech.say(self.translator.get_string("click"))
         qi.async(self.blink)
         self.take_picture()
 
@@ -125,7 +129,7 @@ class NRGimmickActivity(object):
         if not image is None:
             self.logger.info("Sending image...")
             fut = qi.async(self.sendImage, image)
-            qi.async(self.s.ALTextToSpeech.say, "Let's see...")
+            qi.async(self.s.ALTextToSpeech.say, self.translator.get_string("lets_see"))
             fut.addCallback(self.future_judge)
 
     def future_judge(self, fut):
@@ -148,18 +152,18 @@ class NRGimmickActivity(object):
             self.logger.info("Got result {} Robot {} player {}".format(result, self.choices[choice_index], val))
             
         self.s.ALLeds.fadeRGB( "FaceLeds", color, self.duration, _async=True )                
-        self.s.ALTextToSpeech.setLanguage(self.current_language)
         self.logger.info("judge said {}".format(val))
         qi.async(self.say_result, val, result)
 
 
     def say_result(self, player_choice, result):
-        self.s.ALTextToSpeech.say("You chose {}. I chose {}.".format(player_choice, self.current_choice))
-        self.s.ALTextToSpeech.say(self.decision_translations[self.game_states_to_translation[result]])
+        self.s.ALTextToSpeech.setLanguage(self.current_language)
+        self.s.ALTextToSpeech.say(self.translator.get_string("say_result").format(player_choice, self.current_choice))
+        self.s.ALTextToSpeech.say(self.translator.get_string(self.decision_translations[self.game_states_to_translation[result]]))
         qi.async(self.ask_to_play_again, delay=1300000)
 
     def ask_to_play_again(self):
-        self.s.ALTextToSpeech.say("Touch my right foot bumper to play again.")
+        self.s.ALTextToSpeech.say(self.translator.get_string("play_again"))
 
     def clearEyes(self):
         self.s.ALLeds.fadeRGB( "FaceLeds", 0xffffff, self.duration, _async=True )
@@ -202,10 +206,10 @@ class NRGimmickActivity(object):
         self.s.ALTextToSpeech.setLanguage(self.current_language)
         if current_posture != "Standing":
             fut = qi.async(self.s.ALRobotPosture.goToPosture, "Stand", 0.6)
-            self.s.ALTextToSpeech.say("I need to stand up.")
+            self.s.ALTextToSpeech.say(self.translator.get_string("must_stand"))
         if fut != None:
             fut.wait()
-        self.s.ALTextToSpeech.say("Let's play a game of rock, paper, scissors")
+        self.s.ALTextToSpeech.say(self.translator.get_string("lets_play"))
         self.play_round()
         
     def on_start(self):
@@ -222,14 +226,14 @@ class NRGimmickActivity(object):
         self.clearEyes()
         self.logger.info("connected and ready!")
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("Gimmick started.")
+        self.s.ALTextToSpeech.say(self.translator.get_string("started"))
         
     def stop(self, *args):
         if args[0] != 0:
             return
         self.logger.info("User initiated stop")
         self.s.ALTextToSpeech.setLanguage(self.current_language)
-        self.s.ALTextToSpeech.say("Stopping gimmick.")
+        self.s.ALTextToSpeech.say(self.translator.get_string('stopping'))
         self.qiapp.stop()
 
     def on_stop(self):

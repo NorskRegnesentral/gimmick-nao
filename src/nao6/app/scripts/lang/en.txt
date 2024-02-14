@@ -1,0 +1,15 @@
+lose_game=I win!
+win_game=You win!
+tie_game=It's a tie.
+unknown_game=I couldn't see what you chose.
+rock=rock
+paper=paper
+scissors=scissors
+click=Click...
+lets_see=Let's see...
+say_result=You chose {}. I chose {}.
+play_again=Touch my right foot bumper to play again.
+must_stand=I need to stand up.
+lets_play=Let's play a game of rock, paper, scissors
+started=Gimmick started.
+stopping=Stopping gimmick.
