@@ -20,7 +20,7 @@ ssh $SSH_BASE mkdir -p $DEST_PROGS
 
 RSYNC=$(which rsync)
 SYNC_ARGS="-avdz"
-${RSYNC:?"rysnc not found!"} $SYNC_ARGS "$SRC_DIR/src/nao6/app/scripts" ${DEST_DIR}${DEST_PROGS}
+${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' "$SRC_DIR/src/nao6/app/scripts" ${DEST_DIR}${DEST_PROGS}
 $RSYNC $SYNC_ARGS "$SRC_DIR/src/mediapipe_server" ${DEST_DIR}${DEST_PROGS}
 
 DEST_SCRIPTS="gimmick/scripts"
