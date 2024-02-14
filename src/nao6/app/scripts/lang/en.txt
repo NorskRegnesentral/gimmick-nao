@@ -5,6 +5,7 @@ unknown_game=I couldn't see what you chose.
 rock=rock
 paper=paper
 scissors=scissors
+unknown=unknown
 click=Click...
 lets_see=Let's see...
 say_result=You chose {}. I chose {}.
