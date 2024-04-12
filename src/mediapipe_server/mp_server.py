@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
+import fnmatch
 import os
 import cv2
+import time
 import numpy as np
 import zmq
 import gimmick_model.recognitionmodel
-from typing import List
 
 class GimmickServer():
     BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
@@ -48,9 +49,28 @@ class GimmickServer():
         self.socket.send_string(result)
         
 
+def save_picture(image: np.ndarray):
+    DateMask = "%Y-%m-%dT%H_%M"
+    MachineName = os.uname().nodename
+    timestr = time.strftime(DateMask)
+    filename = f"gimmick-{MachineName}-{timestr}.jpg"
+    file_path = os.path.join(GimmickServer.DIR_PATH, filename)
+    dup_count = 1
+    while os.path.exists(file_path):
+        file_name = f"{MachineName}-{timestr}-{dup_count}.jpg"
+        file_path = os.path.join(GimmickServer.DIR_PATH, file_name)
+        dup_count += 1
+
+    cv2.imwrite(file_path, image)
+
+
 if __name__ == "__main__":
     server = GimmickServer()
+    save_pictures = True
+
     while True:
         image = server.receive_image()
         result = server.process_image(image)
         server.send_result(result)
+        if save_pictures:
+            save_picture(image)
