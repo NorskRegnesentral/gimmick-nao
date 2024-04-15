@@ -14,6 +14,7 @@ import stk.events
 import stk.services
 import stk.logging
 import vision_definitions
+import functools
 import os
 import qi
 import signal
@@ -53,12 +54,15 @@ class NRGimmickActivity(object):
         self.s = stk.services.ServiceCache(qiapp.session)
         self.logger = stk.logging.get_logger(qiapp.session, self.APP_ID)
         self.gimmick_client = gimmick_client.SimpleGimmickClient()
+        self.memory_service = qiapp.session.service("ALMemory")
         self.current_language = "Norwegian"
         self.choices = ["rock", "paper", "scissors"]
         self.current_choice = ""
         self.translator = translator.Translator()
         self.translator.read_languages(['en', 'nb'])
         self.translator.language = 'nb'
+        self.front_head_pressed = False
+        self.left_arm_pressed = False
 
     def connectToCamera(self):
         try:
@@ -225,14 +229,26 @@ class NRGimmickActivity(object):
         self.events.connect("RearTactilTouched", self.swap_stand_sit)
         self.events.connect("MiddleTactilTouched", self.swap_languages)
         self.events.connect("RightBumperPressed", self.play_rps)
-        self.events.connect("LeftBumperPressed", self.stop)
+
+        self.touch = self.memory_service.subscriber("TouchChanged")
+        self.id = self.touch.signal.connect(functools.partial(self.onTouched, "TouchChanged"))
 
         self.blink()
         self.clearEyes()
         self.logger.info("connected and ready!")
         self.s.ALTextToSpeech.setLanguage(self.current_language)
         self.s.ALTextToSpeech.say(self.translator.get_string("started"))
-        
+
+    def onTouched(self, strVarName, values):
+        for part in values:
+            if part[0] == "Head/Touch/Front":
+                self.front_head_pressed = part[1]
+            elif part[0] == "LArm":
+                self.left_arm_pressed = part[1]
+
+        if self.left_arm_pressed and self.front_head_pressed:
+            self.stop(0)
+
     def swap_languages(self, *args):
         if args[0] != 0:
             return
