@@ -66,7 +66,7 @@ def save_picture(image: np.ndarray):
 
 if __name__ == "__main__":
     server = GimmickServer()
-    save_pictures = True
+    save_pictures = False
 
     while True:
         image = server.receive_image()
