@@ -57,7 +57,7 @@ def save_picture(image: np.ndarray):
     file_path = os.path.join(GimmickServer.DIR_PATH, filename)
     dup_count = 1
     while os.path.exists(file_path):
-        file_name = f"{MachineName}-{timestr}-{dup_count}.jpg"
+        file_name = f"gimmick-{MachineName}-{timestr}-{dup_count}.jpg"
         file_path = os.path.join(GimmickServer.DIR_PATH, file_name)
         dup_count += 1
 
