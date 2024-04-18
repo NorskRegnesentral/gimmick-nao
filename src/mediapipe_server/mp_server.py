@@ -42,7 +42,7 @@ class GimmickServer():
 
 
     def process_image(self, image: np.ndarray) -> str:
-        _, result_str, _  = self.recognitionModel.get_hand_landmarks((image,), draw_landmarks=False)
+        _, result_str, _  = self.recognitionModel.predict((image,), draw_landmarks=False)
         return result_str
 
     def send_result(self, result: str) -> None:

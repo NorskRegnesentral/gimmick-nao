@@ -1,2 +1,2 @@
 zmq
-gimmick_model
+gimmick_model >= 0.0.5
