@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 stk.runner.py
 
@@ -17,6 +19,7 @@ __email__ = 'ekroeger@aldebaran.com'
 import sys
 import qi
 from distutils.version import LooseVersion
+from six.moves import input
 
 #
 # Helpers for making sure we have a robot to connect to
@@ -45,18 +48,18 @@ def get_debug_robot():
         import qiq.config
         qiqrobot = qiq.config.defaultHost()
         if qiqrobot:
-            robot = raw_input(
+            robot = input(
                 "connect to which robot? (default is {0}) ".format(qiqrobot))
             if robot:
                 return robot
             else:
                 return qiqrobot
         else:
-            print "qiq found, but it has no default robot configured."
+            print("qiq found, but it has no default robot configured.")
     except ImportError:
         # qiq not installed
-        print "qiq not installed (you can use it to set a default robot)."
-    return raw_input("connect to which robot? ")
+        print("qiq not installed (you can use it to set a default robot).")
+    return input("connect to which robot? ")
 
 
 def init(qi_url=None):
@@ -68,7 +71,7 @@ def init(qi_url=None):
         if bool(args.qi_url):
             qi_url = args.qi_url
         elif not is_on_robot():
-            print "no --qi-url parameter given; interactively getting debug robot."
+            print("no --qi-url parameter given; interactively getting debug robot.")
             debug_robot = get_debug_robot()
             if debug_robot:
                 sys.argv.extend(["--qi-url", debug_robot])
@@ -121,10 +124,10 @@ def run_activity(activity_class, service_name=None):
                         if hasattr(activity, "logger"):
                             activity.logger.error(msg)
                         else:
-                            print msg
+                            print(msg)
                     finally:
                         qiapp.stop()
-            qi.async(activity.on_start).addCallback(handle_on_start_done)
+            qi.runAsync(activity.on_start).addCallback(handle_on_start_done)
 
         # Run the QiApplication, which runs until someone calls qiapp.stop()
         qiapp.run()
@@ -134,7 +137,7 @@ def run_activity(activity_class, service_name=None):
         if hasattr(activity, "on_stop"):
             # We need a qi.async call so that if the class is single threaded,
             # it will wait for callbacks to be finished.
-            qi.async(activity.on_stop).wait()
+            qi.runAsync(activity.on_stop).wait()
         if service_id:
             qiapp.session.unregisterService(service_id)
 
