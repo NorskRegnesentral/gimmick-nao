@@ -20,12 +20,12 @@ ssh $SSH_BASE mkdir -p $DEST_PROGS
 
 RSYNC=$(which rsync)
 SYNC_ARGS="-avdz"
-${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' -f '- .#*' "$SRC_DIR/src/nao6/app/scripts" ${DEST_DIR}${DEST_PROGS}
+${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' -f '- .#*' "$SRC_DIR/src/nao/app/scripts" ${DEST_DIR}${DEST_PROGS}
 $RSYNC $SYNC_ARGS "$SRC_DIR/src/mediapipe_server" ${DEST_DIR}${DEST_PROGS}
 
 DEST_SCRIPTS="gimmick/scripts"
 ssh $SSH_BASE mkdir -p "$DEST_SCRIPTS"
 
-for script in start_gimmick_server.sh start_gimmick_client.sh; do
+for script in start_gimmick_client.sh; do
     $RSYNC $SYNC_ARGS "$SRC_DIR/scripts/$script" ${DEST_DIR}${DEST_SCRIPTS}
 done
