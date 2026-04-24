@@ -16,7 +16,7 @@ system.
 
 You need to have numpy and zeromq for Python 2 installed on the NAO
 for this to work. Numpy is there by default, but zeromq must be built.
-We have that from ROSA. Then you simply run main.
+You can get a copy from the [nao-remote](https://github.com/NorskRegnesentral/nao-remote) repository. Then you simply run main.
 
 Once it is running, pressing the right foot bumper will start a game.
 Pressing the left foot bumper will stop the gimmick. Pressing the top
@@ -78,8 +78,7 @@ to just turn it off and try again.
 
 # How the thing works
 
-Right now, the classifier runs on the NAO and there are no game
-elements. With the scripts running, you can touch parts of NAO's body
+Right now, the classifier runs on the NAO and there are simple game elements. With the scripts running, you can touch parts of NAO's body
 to activate the classifier.
 
 * Left Bumper: Start game
@@ -97,5 +96,4 @@ connected, but it is nice to run the battery down a little.
 
 # Misc
 
-There is code here for NAO6, we'll see about getting it to work with a
-NAO5 later.
+There is code here for NAO6. You can run this on a NAO5 with the run_remote branch using naoqi installed on your laptop.
