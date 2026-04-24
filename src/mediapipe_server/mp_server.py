@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# SPDX-License-Identifier: BSD-2-Clause
+
 import fnmatch
 import os
 import cv2

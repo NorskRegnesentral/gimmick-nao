@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Script to sync between git repo and the robot
 
 if [ $# -lt 1 ]; then

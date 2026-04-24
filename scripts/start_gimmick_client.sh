@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier: BSD-2-Clause
+
 source ~/rosa/scripts/activate-py2zqm.sh
 
 # Make sure that the python encoding is utf-8 always.

@@ -1,4 +1,7 @@
 #!/usr/bin/env python2
+
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 A sample showing how to make a Python script as an app.
 """
